@@ -1,0 +1,14 @@
+Microsoft Windows [Version 10.0.16299.192]
+(c) 2017 Microsoft Corporation. All rights reserved.
+
+C:\Users\Pleasure Cruise>cd Desktop
+
+C:\Users\Pleasure Cruise\Desktop>javac RandomMonth.java
+
+C:\Users\Pleasure Cruise\Desktop>java RandomMonth
+September
+
+C:\Users\Pleasure Cruise\Desktop>java RandomMonth
+October
+
+C:\Users\Pleasure Cruise\Desktop>
