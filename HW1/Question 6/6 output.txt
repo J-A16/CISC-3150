@@ -1,0 +1,32 @@
+Microsoft Windows [Version 10.0.16299.192]
+(c) 2017 Microsoft Corporation. All rights reserved.
+
+C:\Users\Pleasure Cruise>cd Desktop
+
+C:\Users\Pleasure Cruise\Desktop>javac StateOfCircles.java
+
+C:\Users\Pleasure Cruise\Desktop>java StateOfCircles
+Please enter the enter the center coordinates and radiuses of two circles
+in the form: xC1 yC1 r1 xC2 yC2 r2
+0 0 1 3 0 1
+Circles are separate from each other
+
+C:\Users\Pleasure Cruise\Desktop>java StateOfCircles
+Please enter the enter the center coordinates and radiuses of two circles
+in the form: xC1 yC1 r1 xC2 yC2 r2
+0 0 1 2 0 1
+Circles are touching
+
+C:\Users\Pleasure Cruise\Desktop>java StateOfCircles
+Please enter the enter the center coordinates and radiuses of two circles
+in the form: xC1 yC1 r1 xC2 yC2 r2
+0 0 1 1 0 1
+Circles are overlapping
+
+C:\Users\Pleasure Cruise\Desktop>java StateOfCircles
+Please enter the enter the center coordinates and radiuses of two circles
+in the form: xC1 yC1 r1 xC2 yC2 r2
+0 0 1 0 0 1
+Circles are within one another
+
+C:\Users\Pleasure Cruise\Desktop>
