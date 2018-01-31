@@ -1,0 +1,29 @@
+Microsoft Windows [Version 10.0.16299.192]
+(c) 2017 Microsoft Corporation. All rights reserved.
+
+C:\Users\Pleasure Cruise>cd Desktop
+
+C:\Users\Pleasure Cruise\Desktop>javac CircleArea.java
+
+C:\Users\Pleasure Cruise\Desktop>java CircleArea
+Please enter the radius of the circle and then press enter to
+calculate it's area. Press Ctrl + z and then enter to quit.
+1
+3.141592653589793
+3
+28.274333882308138
+5
+78.53981633974483
+7
+153.93804002589985
+s
+Please enter a radius and then press enter to calculate the
+circle's area or press Ctrl + z and then enter to quit.
+d
+Please enter a radius and then press enter to calculate the
+circle's area or press Ctrl + z and then enter to quit.
+4
+50.26548245743669
+^Z
+
+C:\Users\Pleasure Cruise\Desktop>
