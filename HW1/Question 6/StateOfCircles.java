@@ -27,7 +27,7 @@ public class StateOfCircles {
 		
 		if(distanceBetweenCenters > r1 + r2){
 			System.out.println("Circles are separate from each other");
-		} else if (distanceBetweenCenters == r1 + r2){
+		} else if (distanceBetweenCenters - (r1 + r2) < 0.0001){
 			System.out.println("Circles are touching");
 		} else if (distanceBetweenCenters + r1 > r2 && distanceBetweenCenters + r2 > r1){
 			System.out.println("Circles are overlapping");
