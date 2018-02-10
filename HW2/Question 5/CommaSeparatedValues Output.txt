@@ -1,0 +1,17 @@
+Microsoft Windows [Version 10.0.16299.192]
+(c) 2017 Microsoft Corporation. All rights reserved.
+
+C:\Users\Pleasure Cruise>cd Desktop
+
+C:\Users\Pleasure Cruise\Desktop>javac CommaSeparatedValues.java
+
+C:\Users\Pleasure Cruise\Desktop>java CommaSeparatedValues
+adsafs,fdsafds fdsafdsf, dssfd ,
+adsafs
+fdsafds fdsafdsf
+ dssfd
+^Z
+
+
+
+C:\Users\Pleasure Cruise\Desktop>
