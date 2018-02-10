@@ -1,0 +1,2 @@
+I was able to tokenize each character by making
+the delimiter an empty string

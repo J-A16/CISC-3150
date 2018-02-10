@@ -1,0 +1,34 @@
+Microsoft Windows [Version 10.0.16299.192]
+(c) 2017 Microsoft Corporation. All rights reserved.
+
+C:\Users\Pleasure Cruise>cd Desktop
+
+C:\Users\Pleasure Cruise\Desktop>javac TokenizeCharacters.java
+
+C:\Users\Pleasure Cruise\Desktop>java TokenizeCharacters
+1238ieuwjdksna dsa,
+1
+2
+3
+8
+i
+e
+u
+w
+j
+d
+k
+s
+n
+a
+
+d
+s
+a
+,
+
+
+
+^Z
+
+C:\Users\Pleasure Cruise\Desktop>
