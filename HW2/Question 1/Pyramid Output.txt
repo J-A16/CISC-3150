@@ -1,0 +1,17 @@
+Microsoft Windows [Version 10.0.16299.192]
+(c) 2017 Microsoft Corporation. All rights reserved.
+
+C:\Users\Pleasure Cruise>cd Desktop
+
+C:\Users\Pleasure Cruise\Desktop>javac Pyramid.java
+
+C:\Users\Pleasure Cruise\Desktop>java Pyramid
+Please enter the height of the pyramid you would like
+5
+        1
+      1 2 1
+    1 2 3 2 1
+  1 2 3 4 3 2 1
+1 2 3 4 5 4 3 2 1
+
+C:\Users\Pleasure Cruise\Desktop>
