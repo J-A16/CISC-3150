@@ -1,0 +1,18 @@
+Microsoft Windows [Version 10.0.16299.192]
+(c) 2017 Microsoft Corporation. All rights reserved.
+
+C:\Users\Pleasure Cruise>cd Desktop
+
+C:\Users\Pleasure Cruise\Desktop>javac PalindromeChecker.java
+
+C:\Users\Pleasure Cruise\Desktop>java PalindromeChecker
+Please enter a string to check if it is a palindrome
+1231
+String is not a palindrome
+
+C:\Users\Pleasure Cruise\Desktop>java PalindromeChecker
+Please enter a string to check if it is a palindrome
+1234321
+String is a palindrome
+
+C:\Users\Pleasure Cruise\Desktop>
