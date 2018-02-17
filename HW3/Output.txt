@@ -1,0 +1,98 @@
+Microsoft Windows [Version 10.0.16299.248]
+(c) 2017 Microsoft Corporation. All rights reserved.
+
+C:\Users\Pleasure Cruise>cd Desktop
+
+C:\Users\Pleasure Cruise\Desktop>javac Driver.java MyString.java
+
+C:\Users\Pleasure Cruise\Desktop>java Driver
+Error: Could not find or load main class Driver
+
+C:\Users\Pleasure Cruise\Desktop>java Driver MyString
+Error: Could not find or load main class Driver
+
+C:\Users\Pleasure Cruise\Desktop>java Driver.class
+Error: Could not find or load main class Driver.class
+
+C:\Users\Pleasure Cruise\Desktop>java Driver.class MyString.class
+Error: Could not find or load main class Driver.class
+
+C:\Users\Pleasure Cruise\Desktop>java Driver
+Error: Could not find or load main class Driver
+
+C:\Users\Pleasure Cruise\Desktop>javac Driver.java
+Driver.java:14: error: cannot find symbol
+                MyString string = new MyString(temp);
+                ^
+  symbol:   class MyString
+  location: class Driver
+Driver.java:14: error: cannot find symbol
+                MyString string = new MyString(temp);
+                                      ^
+  symbol:   class MyString
+  location: class Driver
+Driver.java:66: error: cannot find symbol
+                System.out.println(MyString.valueOf(19231));
+                                   ^
+  symbol:   variable MyString
+  location: class Driver
+3 errors
+
+C:\Users\Pleasure Cruise\Desktop>javac Driver.java MyString.java
+
+C:\Users\Pleasure Cruise\Desktop>java Driver
+Error: Could not find or load main class Driver
+
+C:\Users\Pleasure Cruise\Desktop>java com.MyString.Driver
+Error: Could not find or load main class com.MyString.Driver
+
+C:\Users\Pleasure Cruise\Desktop>Java MyString
+Error: Could not find or load main class MyString
+
+C:\Users\Pleasure Cruise\Desktop>javac *.java
+
+C:\Users\Pleasure Cruise\Desktop>java Driver
+char[] temp = {'a', 'B', 'c', 'D', 'e'}, temp:
+aBcDe
+
+MyString string = new MyString(temp), temp[3] = 'k', temp:
+aBcke
+
+string:
+aBcDe
+
+string.charAt(0)
+a
+
+string.length()
+5
+
+string.substring(3, 5)
+De
+
+string.toLowerCase()
+abcde
+
+string.toUpperCase()
+ABCDE
+
+string.compareTo(string.substring(0, 5)
+0
+
+string.compareTo(string.substring(1, 5)
+-1
+
+string.compareTo(string.substring(0, 4)
+1
+
+string.getMyString()
+aBcDe
+
+string.toString()
+aBcDe
+
+MyString.valueOf(19231)
+19231
+
+
+C:\Users\Pleasure Cruise\Desktop>
