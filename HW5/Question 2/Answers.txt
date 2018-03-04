@@ -1,0 +1,35 @@
+a)
+Actual method called is: Dog.call(int k)
+This is an example of:   overloading
+
+b)
+Actual method called is: Cat.toString()
+This is an example of: 	 overriding
+
+c)
+Actual method called is: Error!
+This is an example of: 	 it-was-an-error!
+
+d)
+Actual method called is: a method from class Object
+This is an example of: 	 
+
+e)
+Actual method called is: Pet.call()
+This is an example of: 	 
+
+f)
+Actual method called is: Cat.toString(String b)
+This is an example of: 	 overloading
+
+g)
+Actual method called is: Error!
+This is an example of: 	 it-was-an-error!
+
+h)
+Actual method called is: Pet.feet()
+This is an example of: 	 
+
+i)
+Actual method called is: Error!
+This is an example of: 	 it-was-an-error!
