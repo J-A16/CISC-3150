@@ -1,12 +1,2 @@
-Microsoft Windows [Version 10.0.16299.248]
-(c) 2017 Microsoft Corporation. All rights reserved.
-
-C:\Users\Pleasure Cruise>cd Desktop
-
-C:\Users\Pleasure Cruise\Desktop>javac CircleSquare.java
-
-C:\Users\Pleasure Cruise\Desktop>java CircleSquare
-3.14157912
-56254
-
-C:\Users\Pleasure Cruise\Desktop>
+3.141615767
+205613
