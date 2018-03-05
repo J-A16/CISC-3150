@@ -15,7 +15,7 @@ Actual method called is: a method from class Object
 This is an example of: 	 
 
 e)
-Actual method called is: Pet.call()
+Actual method called is: Dog.call()
 This is an example of: 	 
 
 f)
