@@ -1,41 +1,88 @@
-import java.math.BigInteger;
+import java.util.Date;
+import java.util.SplittableRandom;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
-class CircleSquare2 {
-	public static void main(String[] args) {
-		long before = System.currentTimeMillis();
+class RunnableDemo implements Runnable {
+	private Thread t;
+	private String threadName;
+	private int numberOfPoints;
+	private int numberOfThreads;
+	private int pointsInCircle;
+	final private static long NUMBER_OF_POINTS = 4000000000L;
+	private static AtomicInteger threadsDone = new AtomicInteger();
+	private static AtomicLong totalPointsInCircle = new AtomicLong();
+	private long before;
+	private double pointX, pointY;
+	private SplittableRandom rand;
+	private long seed;
 
-		final double RADIUS = 5.0;
+	RunnableDemo(String name, int numPoints, int numThreads, long before) {
+		threadName = name;
+		numberOfPoints = numPoints;
+		numberOfThreads = numThreads;
+		pointsInCircle = 0;
+		this.before = before;
+		rand = new SplittableRandom();
+		seed = rand.nextLong();
+	}
 
-		final double RADIUS_SQUARED = RADIUS * RADIUS;
-
-		final int ONE_BILLION_POINTS = 1000000000;
-
-		final int NUMBER_OF_BILLIONS = 4;
-
-		double pointX, pointY;
-
-		int[] pointsInCircleEachBillion = new int[NUMBER_OF_BILLIONS];
-
-		for (int i = 0; i < NUMBER_OF_BILLIONS; i++) {
-			for (int j = 0; j < ONE_BILLION_POINTS; j++) {
-
-				pointX = Math.random() * RADIUS;
-				pointY = Math.random() * RADIUS;
-
-				if ((pointX * pointX) + (pointY * pointY) <= RADIUS_SQUARED) {
-					++pointsInCircleEachBillion[i];
-				}
-			}
-		}
-
-		double pointsInCircle = 0;
+	public void run() {
 		
-		for (int i = 0; i < NUMBER_OF_BILLIONS; i++) {
-			pointsInCircle += pointsInCircleEachBillion[i];
+		System.out.println("Start " + threadName + " " + new Date());
+		
+		for (int i = 0; i < numberOfPoints; i = i + 1) {
+			
+			seed = (seed * 0x5DEECE66DL + 0xBL) & ((1L << 48) - 1);
+			
+			pointX = (((long)(seed >>> (48 - 26)) << 27) + (seed >>> (48 - 27)))
+				     / (double)(1L << 53);
+			
+			seed = (seed * 0x5DEECE66DL + 0xBL) & ((1L << 48) - 1);
+			
+			pointY = (((long)(seed >>> (48 - 26)) << 27) + (seed >>> (48 - 27)))
+				     / (double)(1L << 53);
+
+			pointsInCircle = pointsInCircle +
+					(((pointX * pointX) + (pointY * pointY) <= 1.0) ? 1 : 0);
+			
 		}
 
-		System.out.println((pointsInCircle / ((double)ONE_BILLION_POINTS * NUMBER_OF_BILLIONS)) * 4);
+		System.out.println("End " + threadName + " " + new Date());
 
-		System.out.println(System.currentTimeMillis() - before);
+		totalPointsInCircle.addAndGet(pointsInCircle);
+		
+		if (threadsDone.incrementAndGet() == numberOfThreads) {
+			System.out.println(threadName);
+			System.out.println((totalPointsInCircle.get() / (double) NUMBER_OF_POINTS) * 4);
+			System.out.println(System.currentTimeMillis() - before);
+			System.out.println(new Date());
+		}
+	}
+
+	public void start() {
+		if (t == null) {
+			t = new Thread(this, threadName);
+			t.start();
+		}
+	}
+}
+
+public class CircleSquare2 {
+
+	public static void main(String args[]) {
+		long before = System.currentTimeMillis();
+		System.out.println("Start");
+		int numberOfThreads = 64;
+		long NUMBER_OF_POINTS = 4000000000L;
+		int pointsPerThread = (int)(NUMBER_OF_POINTS / numberOfThreads);
+		
+		RunnableDemo[] testers = new RunnableDemo[numberOfThreads];
+		
+
+		for (int i = 0; i < numberOfThreads; ++i) {
+			testers[i] = new RunnableDemo("Thread-" + (i + 1), pointsPerThread, numberOfThreads, before);
+			testers[i].start();
+		}
 	}
 }
