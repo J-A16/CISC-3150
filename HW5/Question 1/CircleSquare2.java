@@ -1,27 +1,20 @@
 import java.util.SplittableRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 class RunnableDemo implements Runnable {
-	private Thread t;
+	public Thread t;
 	private String threadName;
 	private int numberOfPoints;
-	private int numberOfThreads;
 	private int pointsInCircle;
-	final private static long NUMBER_OF_POINTS = 4000000000L;
-	private static AtomicInteger threadsDone = new AtomicInteger();
-	private static AtomicLong totalPointsInCircle = new AtomicLong();
-	private long before;
+	public static AtomicLong totalPointsInCircle = new AtomicLong();
 	private double pointX, pointY;
 	private SplittableRandom rand;
 	private long seed;
 
-	RunnableDemo(String name, int numPoints, int numThreads, long before) {
+	RunnableDemo(String name, int numPoints) {
 		threadName = name;
 		numberOfPoints = numPoints;
-		numberOfThreads = numThreads;
 		pointsInCircle = 0;
-		this.before = before;
 		rand = new SplittableRandom();
 		seed = rand.nextLong();
 	}
@@ -44,11 +37,6 @@ class RunnableDemo implements Runnable {
 		}
 
 		totalPointsInCircle.addAndGet(pointsInCircle);
-		
-		if (threadsDone.incrementAndGet() == numberOfThreads) {
-			System.out.println((totalPointsInCircle.get() / (double) NUMBER_OF_POINTS) * 4);
-			System.out.println(System.currentTimeMillis() - before);
-		}
 	}
 
 	public void start() {
@@ -59,7 +47,7 @@ class RunnableDemo implements Runnable {
 	}
 }
 
-public class TestThread {
+public class CircleSquare2 {
 
 	public static void main(String args[]) {
 		long before = System.currentTimeMillis();
@@ -70,8 +58,20 @@ public class TestThread {
 		RunnableDemo[] testers = new RunnableDemo[numberOfThreads];
 		
 		for (int i = 0; i < numberOfThreads; ++i) {
-			testers[i] = new RunnableDemo("Thread-" + (i + 1), pointsPerThread, numberOfThreads, before);
+			testers[i] = new RunnableDemo("Thread-" + (i + 1), pointsPerThread);
 			testers[i].start();
 		}
+		
+		for (int i = 0; i < numberOfThreads; ++i) {
+			try {
+				testers[i].t.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println((RunnableDemo.totalPointsInCircle.get() / (double) NUMBER_OF_POINTS) * 4);
+		System.out.println(System.currentTimeMillis() - before);
 	}
 }
