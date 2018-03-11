@@ -10,14 +10,16 @@ class NQueensSolver implements Runnable {
 	private String threadName;
 
 	public static ConcurrentHashMap<String, int[][]> solutions = new ConcurrentHashMap<String, int[][]>();
+	public static ConcurrentHashMap<String, int[][]> middleSolutions = new ConcurrentHashMap<String, int[][]>();
 	public static ConcurrentHashMap<Integer, String> assignments = new ConcurrentHashMap<Integer, String>();
 	private int numbersOfSquares;
 	private int n;
 	private long configuration;
 	private long configurationStop;
 	private long[] positionsOfQueens;
+	private boolean middle;
 
-	NQueensSolver(int threadNum, int n, long configuration, long configurationStop) {
+	NQueensSolver(int threadNum, int n, long configuration, long configurationStop, boolean middle) {
 
 		this.threadName = "solver" + threadNum;
 
@@ -31,6 +33,8 @@ class NQueensSolver implements Runnable {
 
 		this.configurationStop = configurationStop;
 
+		this.middle = middle;
+
 		assignments.put(threadNum, configuration + " - " + configurationStop);
 	}
 
@@ -42,9 +46,12 @@ class NQueensSolver implements Runnable {
 
 			configuration = getPositionsOfQueens(positionsOfQueens, configuration, numbersOfSquares);
 
-			board = positionQueens(positionsOfQueens, n);
+			if (configuration < configurationStop) {
 
-			addSolution(board, solutions);
+				board = positionQueens(positionsOfQueens, n);
+
+				addSolution(board, solutions, middle);
+			}
 
 			++configuration;
 		}
@@ -155,11 +162,17 @@ class NQueensSolver implements Runnable {
 		return board;
 	}
 
-	void addSolution(int[][] board, ConcurrentHashMap<String, int[][]> solutions) {
+	void addSolution(int[][] board, ConcurrentHashMap<String, int[][]> solutions, boolean middle) {
 
-		String key = generateKey(board);
+		if (!middle) {
+			String key = generateKey(board);
 
-		solutions.put(key, board);
+			solutions.put(key, board);
+		} else {
+			String key = generateKey(board);
+
+			middleSolutions.put(key, board);
+		}
 
 	}
 
@@ -195,81 +208,179 @@ class NQueens {
 
 		cin.close();
 
-		long configuration = 0L;
+		if (N % 2 == 0) {
 
-		// find the configuration where every queen is on it's own row and column
-		for (int i = 0; i < N; ++i) {
+			long configuration = 0L;
 
-			configuration += (i * N + i) * Math.pow(N * N, N - (i + 1));
-		}
+			// find the configuration where every queen is on it's own row and
+			// column
+			for (int i = 0; i < N; ++i) {
 
-		// Once the Queen in the first position leaves the first row, the rest
-		// can only be repeats
-		long configurationStop = N * (long) Math.pow(N * N, N - 1);
+				configuration += (i * N + i) * Math.pow(N * N, N - (i + 1));
+			}
 
-		int numberOfThreads = 64;
+			// Once the Queen in the first position passes half way across the
+			// first row, the
+			// rest can be found by doubling the solutions found since the board
+			// is symmetrical
+			long configurationStop = (N / 2) * (long) Math.pow(N * N, N - 1);
 
-		long configurationsPerThread = (configurationStop - configuration) / numberOfThreads;
+			int numberOfThreads = 64;
 
-		NQueensSolver[] solvers = new NQueensSolver[numberOfThreads];
+			long configurationsPerThread = (configurationStop - configuration) / numberOfThreads;
 
-		for (int i = 0; i < numberOfThreads; ++i) {
-			if (i != numberOfThreads - 1) {
-				solvers[i] = new NQueensSolver((i + 1), N, configuration + (configurationsPerThread * i),
-						configuration + (configurationsPerThread * (i + 1)));
-				solvers[i].start();
-			} else {
-				solvers[i] = new NQueensSolver((i + 1), N, configuration + (configurationsPerThread * i),
-						configurationStop);
-				solvers[i].start();
+			NQueensSolver[] solvers = new NQueensSolver[numberOfThreads];
+
+			for (int i = 0; i < numberOfThreads; ++i) {
+				if (i != numberOfThreads - 1) {
+					solvers[i] = new NQueensSolver((i + 1), N, configuration + (configurationsPerThread * i),
+							configuration + (configurationsPerThread * (i + 1)), false);
+					solvers[i].start();
+				} else {
+					solvers[i] = new NQueensSolver((i + 1), N, configuration + (configurationsPerThread * i),
+							configurationStop, false);
+					solvers[i].start();
+				}
+			}
+
+			for (int i = 0; i < numberOfThreads; ++i) {
+				try {
+					solvers[i].t.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		} else {
+
+			long configuration = 0L;
+
+			// find the configuration where every queen is on it's own row and
+			// column
+			for (int i = 0; i < N; ++i) {
+
+				configuration += (i * N + i) * Math.pow(N * N, N - (i + 1));
+			}
+			
+			// Once the Queen in the first position reaches the middle column,
+			// the other side of
+			// the middle column can be found by doubling the solutions found on
+			// the left side since the board is symmetrical
+			long configurationStop = (N / 2) * (long) Math.pow(N * N, N - 1);
+
+			long configurationMiddle = configurationStop;
+
+			long configurationMiddleStop = ((N / 2) + 1) * (long) Math.pow(N * N, N - 1);
+
+			int numberOfThreads = 64;
+
+			int numberOfLeftThreads = numberOfThreads - numberOfThreads / 4;
+
+			int numberOfCenterThreads = numberOfThreads / 4;
+
+			long configurationsPerThread = (configurationStop - configuration) / numberOfLeftThreads;
+
+			long configurationsPerCenterThread = (configurationMiddleStop - configurationMiddle)
+					/ numberOfCenterThreads;
+
+			NQueensSolver[] solvers = new NQueensSolver[numberOfThreads];
+
+			for (int i = 0; i < numberOfLeftThreads; ++i) {
+				if (i != numberOfLeftThreads - 1) {
+					solvers[i] = new NQueensSolver((i + 1), N, configuration + (configurationsPerThread * i),
+							configuration + (configurationsPerThread * (i + 1)), false);
+					solvers[i].start();
+				} else {
+					solvers[i] = new NQueensSolver((i + 1), N, configuration + (configurationsPerThread * i),
+							configurationStop, false);
+					solvers[i].start();
+				}
+			}
+
+			for (int i = 0; i < numberOfCenterThreads; ++i) {
+				if (i != numberOfCenterThreads - 1) {
+					solvers[numberOfLeftThreads + i] = new NQueensSolver((numberOfLeftThreads + i + 1), N,
+							configurationMiddle + (configurationsPerCenterThread * i),
+							configurationMiddle + (configurationsPerCenterThread * (i + 1)), true);
+					solvers[numberOfLeftThreads + i].start();
+				} else {
+					solvers[numberOfLeftThreads + i] = new NQueensSolver((numberOfLeftThreads + i + 1), N,
+							configurationMiddle + (configurationsPerCenterThread * i), configurationMiddleStop, true);
+					solvers[numberOfLeftThreads + i].start();
+				}
+			}
+
+			for (int i = 0; i < numberOfThreads; ++i) {
+				try {
+					solvers[i].t.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-/*
+
 		ArrayList<Integer> keys = Collections.list(NQueensSolver.assignments.keys());
-
 		Collections.sort(keys);
-
-		System.out.println(configuration);
-
 		for (int i = 0; i < keys.size(); ++i) {
 			System.out.println(keys.get(i) + " " + NQueensSolver.assignments.get(keys.get(i)));
 		}
 
-		System.out.println(configurationStop);
-
-		System.out.println(configurationStop - configuration);
-
-		System.out.println((configurationStop - configuration) / numberOfThreads);
-*/
-		for (int i = 0; i < numberOfThreads; ++i) {
-			try {
-				solvers[i].t.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		System.out.println("Number of solutions - " + NQueensSolver.solutions.size());
+		System.out.println("Number of solutions - "
+				+ ((NQueensSolver.solutions.size() * 2) + NQueensSolver.middleSolutions.size()));
 
 		System.out.println();
-		
+
 		ArrayList<String> boardKeys = Collections.list(NQueensSolver.solutions.keys());
 
 		Collections.sort(boardKeys);
 
 		for (int i = 0; i < boardKeys.size(); ++i) {
-			
+
 			int[][] board = NQueensSolver.solutions.get(boardKeys.get(i));
-			
+
 			for (int j = 0; j < board.length; ++j) {
 
 				System.out.println(Arrays.toString(board[j]));
 			}
-			
+
 			System.out.println();
 		}
 		
+		boardKeys = Collections.list(NQueensSolver.middleSolutions.keys());
+
+		Collections.sort(boardKeys);
+
+		for (int i = 0; i < boardKeys.size(); ++i) {
+
+			int[][] board = NQueensSolver.middleSolutions.get(boardKeys.get(i));
+
+			for (int j = 0; j < board.length; ++j) {
+
+				System.out.println(Arrays.toString(board[j]));
+			}
+
+			System.out.println();
+		}
+		
+		boardKeys = Collections.list(NQueensSolver.solutions.keys());
+
+		Collections.sort(boardKeys);
+
+		for (int i = 0; i < boardKeys.size(); ++i) {
+
+			int[][] board = NQueensSolver.solutions.get(boardKeys.get(i));
+
+			for (int j = 0; j < board.length; ++j) {
+				String[] reversedArray = new StringBuffer(Arrays.toString(board[j]).substring(1, Arrays.toString(board[j]).length() - 1)).reverse().toString().split(" ,");
+				
+				System.out.println("[" + String.join(", ", reversedArray) + "]");
+			}
+
+			System.out.println();
+		}
+
 		System.out.println("Seconds " + (System.currentTimeMillis() - before) / 1000.0);
 
 	}
