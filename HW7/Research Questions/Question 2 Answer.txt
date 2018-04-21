@@ -1,0 +1,5 @@
+https://stackoverflow.com/questions/39247984/what-is-interface-super
+Gives an explanation, this syntax is used because a class can
+implement multiple interfaces, so the interface name is used to
+differentiate between them incase more than one has the method.
+It is to eliminate the possibility of ambiguity.

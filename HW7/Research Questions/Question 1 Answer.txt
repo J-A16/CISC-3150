@@ -1,0 +1,3 @@
+I could not find anything on this, though everything points to the
+compiler seeing that only the unchecked exception is thrown, so there
+is no need to declare it.
