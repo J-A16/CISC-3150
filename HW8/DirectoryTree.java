@@ -16,9 +16,9 @@ class DirectoryTree {
 			e1.printStackTrace();
 		}
 
-		File head = new File("C:\\Users\\Pleasure Cruise\\Desktop\\eclipse");
+		File root = new File("C:\\Users\\Pleasure Cruise\\Desktop\\eclipse");
 
-		File[] files = head.listFiles();
+		File[] files = root.listFiles();
 
 		ArrayDeque<Boolean> verticalLine = new ArrayDeque<>();
 
